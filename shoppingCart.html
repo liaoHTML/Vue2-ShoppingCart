@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" src="./vue.js"></script>
+	<style>
+		#app {
+			position: absolute;
+			left: 10%;
+			right: 10%;
+		}
+		table{
+			width: 100%;
+			border: 1px solid gray;
+		}
+		tbody{
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="" id="app">
+		<table>
+			<tr class="Grid-cell">
+				<th>序号</th>
+				<th>商品名称</th>
+				<th>颜色</th>
+				<th>数量</th>
+				<th>操作</th>
+			</tr>
+			<tr v-for="(good,index) in goods" class="Grid-cell">
+				<th >{{good.id}}</th>
+				<th >{{good.name}}</th>
+				<th>{{good.color}}</th>
+				<th>
+					<button @click="increment(index)">-</button>
+					<input type="text" :value="good.nums" v-model="good.nums">
+					<button @click="add(index)">+</button>
+				</th>
+				<th class="u-1of4"><button @click="putIntoCart(index)">加入购物车</button></th>
+			</tr>
+
+			<tr>
+				<td>
+					购物车
+					<tr>
+						<td>产品名称</td>
+						<td>价格</td>
+						<td>数量</td>
+						<td>总价</td>
+					</tr>
+					<tr v-for="good in cartArr">
+						<td>
+							{{good.name}}
+						</td>
+						<td>{{good.price}}</td>
+						<td>{{good.nums}}</td>
+						<td>{{good.price*good.nums}}</td>
+					</tr>
+				</td>
+				<tr>
+					<td>
+						总价： {{totalePrice}}
+					</td>
+				</tr>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+var app = new Vue({
+		el: '#app',
+		data: {
+			nums: 1,
+			goods: [
+				{id:1,name:'iphone7 plus手机',color:'white',nums:1,price:4700},
+				{id:2,name:'华硕笔记本',color:'white',nums:1,price:3700},
+				{id:3,name:'Mac Pro',color:'white',nums:1,price:16000},
+			],
+			cart: new Set(),
+			cartArr: []
+		},
+		methods: {
+			add(index){
+				this.goods[index].nums++;
+				console.log(this.goods);
+			},
+			increment(index){
+				if (this.goods[index].nums>=1) {
+					this.goods[index].nums--;
+				}
+			},
+			putIntoCart(index){
+				// 假如已经有该产品了，并且数量没有改变，就不重复加入
+				var newObj = this.goods[index];
+				this.cart.add(newObj);
+				this.cartArr = Array.from(this.cart);
+			}
+		},
+		computed: {
+			totalePrice(){
+				var sum = 0;
+				for(var obj of this.cartArr){
+					sum+= obj.nums*obj.price;
+				}
+				return sum;
+			}
+		}
+	})
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
